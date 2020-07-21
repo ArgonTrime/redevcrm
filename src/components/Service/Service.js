@@ -8,4 +8,14 @@ const getUsers = async (url) => {
     return await res.json();
 }
 
-export {getUsers};
+const getLeeds = async (url) => {
+    const res = await fetch(url);
+
+    if(!res.ok) {
+        throw new Error();
+    }
+
+    return await res.json();
+}
+
+export {getUsers, getLeeds};

@@ -12,7 +12,7 @@ class Users extends React.Component {
             users: []
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         getUsers('https://redevcrm.herokuapp.com/users')
         .then(users => {
             this.setState({

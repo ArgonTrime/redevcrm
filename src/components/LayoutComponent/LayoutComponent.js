@@ -1,12 +1,13 @@
 import React from 'react';
-import { Layout, Menu, Button} from 'antd';
-import './Layout.css';
+import { Layout, Menu} from 'antd';
+import './LayoutComponent.css';
 import {Route, Link} from 'react-router-dom';
 import Users from '../Users/Users';
 import Leeds from '../Leeds/Leeds';
 import Quotes from '../Quotes/Quotes';
 import Tasks from '../Tasks/Tasks';
 import Activity from '../Activity/Activity';
+import LoginForm from '../Login/LoginForm';
 
 const { Header, Content, Sider } = Layout;
 
@@ -15,13 +16,9 @@ const LayoutComponent = () => {
         <Layout>
             <Header className="header">
                 <div className="logo"/>
-                <Button type="primary" size='Large' style={{
-                    float: 'right',
-                    margin: '16px'
-                }}>
-                    Login
-                </Button>
+                <LoginForm/>
             </Header>
+
             <Layout>
                 <Sider>
                     <Menu theme="dark" mode="inline" style={{
@@ -44,13 +41,14 @@ const LayoutComponent = () => {
                         </Menu.Item>
                     </Menu>
                 </Sider>
+
                 <Content>
-                    <Route path="/" render={() => <div></div>}/>
-                    <Route path='/users' component={Users}/>
-                    <Route path='/Leeds' component={Leeds}/>
-                    <Route path='/Quotes' component={Quotes}/>
-                    <Route path='/Tasks' component={Tasks}/>
-                    <Route path='/Activity' component={Activity}/>
+                        <Route path="/" render={() => <div></div>}/>
+                        <Route path='/users' component={Users}/>
+                        <Route path='/Leeds' component={Leeds}/>
+                        <Route path='/Quotes' component={Quotes}/>
+                        <Route path='/Tasks' component={Tasks}/>
+                        <Route path='/Activity' component={Activity}/>
                 </Content>
             </Layout>
         </Layout>

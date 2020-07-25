@@ -1,11 +1,13 @@
 import React from 'react';
 import { Form, Input, Button, Modal} from 'antd';
 import './LoginForm.css';
+import {loginUser} from '../Service/Service';
 
 class LoginForm extends React.Component {
 
     state = {
-        visible: false
+        visible: false,
+        errorMessage: ''
     }
 
     showForm = () => {
@@ -13,11 +15,36 @@ class LoginForm extends React.Component {
     }
 
     handleOk = () => {
-        this.setState({visible: false})
+        this.setState({
+            visible: false,
+            errorMessage: ''
+        })
     };
     
     handleCancel = () => {
-        this.setState({ visible: false });
+        this.setState({ 
+            visible: false,
+            errorMessage: '' 
+        });
+    };
+
+    onFinish = (values) => {
+        loginUser('https://redevcrm.herokuapp.com/users/login', values)
+        .then(res => {
+            localStorage.setItem('token', res)
+            this.setState({
+                visible: false,
+                errorMessage: ''
+            })
+        })
+        .catch(error => {
+            return error ? this.setState({
+                errorMessage: 'Something went wrong, check the entered data'
+            }) : null
+        });
+    }
+    onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
     };
 
     render() {
@@ -53,6 +80,7 @@ class LoginForm extends React.Component {
 
                     <Form
                         {...layout}
+                        onFinish={this.onFinish}
                     >
                         <Form.Item 
                             label='Email'
@@ -74,13 +102,13 @@ class LoginForm extends React.Component {
                             <Button  
                                 type='primary' 
                                 htmlType='submit'
-                                onClick={this.handleOk}
                             >
                                 Login
                             </Button>
+                            
                         </Form.Item>
                     </Form>
-
+                    <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
                 </Modal>
             </>
             

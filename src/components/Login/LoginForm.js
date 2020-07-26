@@ -5,9 +5,13 @@ import {loginUser} from '../Service/Service';
 
 class LoginForm extends React.Component {
 
-    state = {
-        visible: false,
-        errorMessage: ''
+    constructor(props) {
+        super(props);
+        this.state = {
+            visible: false,
+            errorMessage: ''
+        }
+        this.handleLoginClick = this.props.handleLoginClick;
     }
 
     showForm = () => {
@@ -18,7 +22,7 @@ class LoginForm extends React.Component {
         this.setState({
             visible: false,
             errorMessage: ''
-        })
+        });
     };
     
     handleCancel = () => {
@@ -35,7 +39,8 @@ class LoginForm extends React.Component {
             this.setState({
                 visible: false,
                 errorMessage: ''
-            })
+            });
+            this.handleLoginClick();
         })
         .catch(error => {
             return error ? this.setState({

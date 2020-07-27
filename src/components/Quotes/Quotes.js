@@ -1,6 +1,6 @@
 import React from 'react';
-import {Table, Button, Modal, Form, Input} from 'antd';
-import {getQuotes, postQuote} from '../Service/Service';
+import {Table, Button, Modal, Form, Input, Popconfirm} from 'antd';
+import {getQuotes, postQuote, deleteQuote} from '../Service/Service';
 
 class Quotes extends React.Component {
 
@@ -13,17 +13,24 @@ class Quotes extends React.Component {
                     title: 'Author',
                     dataIndex: 'author',
                     key: 'author',
-                  },
-                  {
+                },
+                {
                     title: 'Quote',
                     dataIndex: 'quote',
                     key: 'quote',
-                  },
-                  {
-                    title: 'Actions',
-                    dataIndex: 'actions',
-                    key: 'actions',
-                  }
+                },
+                {
+                    title: 'Action',
+                    dataIndex: 'action',
+                    render: (text, record) =>
+                        <Popconfirm 
+                            title='Сonfirm deletion?'
+                            onConfirm={() => this.handleDeleteQuote(record.key)}
+                        >
+                            <a href={text}>Delete</a>
+                        </Popconfirm>
+                }
+                
             ],
             visible: false,
             errorMessage: ''
@@ -47,6 +54,16 @@ class Quotes extends React.Component {
             visible: false,
             errorMessage: '' 
         });
+    }
+
+    handleDeleteQuote = (key) => {
+        const quotes = [...this.state.data];
+       
+        deleteQuote(key, 'https://redevcrm.herokuapp.com/quotes')
+            .then(res => console.log(res))
+            .then(() => this.setState({
+                data: quotes.filter(item => item.key !== key)
+            }))
     }
 
     onFinish = (value) => {
@@ -105,12 +122,18 @@ class Quotes extends React.Component {
                 <Button 
                     type="primary"
                     onClick={this.showForm}
+                    style={{
+                        margin: '16px'
+                    }}
                 >
                     Create Quote
                 </Button>
                 <Table 
                     dataSource={data} 
                     columns={columns}
+                    style={{
+                        margin: '0 16px'
+                    }}
                 />
 
                 <Modal 

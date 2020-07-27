@@ -27,10 +27,15 @@ class Users extends React.Component {
 
         if(isLoaded) {
             return (
-                <Table dataSource={users.map(user => ({
-                    ...user,
-                    key: user._id
-                }))}>
+                <Table 
+                    dataSource={users.map(user => ({
+                        ...user,
+                        key: user._id
+                    }))}
+                    style={{
+                        margin: '16px'
+                    }}
+                >
                     <Column title='First Name' dataIndex='firstName' key='firstName'/>
                     <Column title='Email' dataIndex='email' key='email'/>
                     <Column title='Birthday' dataIndex='birthday' key='birthday'/>

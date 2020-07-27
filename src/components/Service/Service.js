@@ -59,11 +59,20 @@ const postQuote = async (url, data) => {
     return res.json();
 }
 
+const deleteQuote = async (item, url) => {
+    const res = await fetch(url + '/' + item, {
+        method: 'DELETE'
+    });
+
+    return res.json();
+}
+
 
 export {
     getUsers, 
     getLeeds, 
     loginUser, 
     getQuotes, 
-    postQuote
+    postQuote,
+    deleteQuote
 };

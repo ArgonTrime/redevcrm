@@ -43,5 +43,27 @@ const getQuotes = async (url) => {
     return res.json();
 }
 
+const postQuote = async (url, data) => {
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)  
+    });
 
-export {getUsers, getLeeds, loginUser, getQuotes};
+    if(!res.ok) {
+        throw new Error(res.status);
+    }
+
+    return res.json();
+}
+
+
+export {
+    getUsers, 
+    getLeeds, 
+    loginUser, 
+    getQuotes, 
+    postQuote
+};

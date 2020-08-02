@@ -22,13 +22,14 @@ class Quotes extends React.Component {
                 {
                     title: 'Action',
                     dataIndex: 'action',
-                    render: (text, record) =>
+                    render: (text, record) => this.state.data ?
                         <Popconfirm 
                             title='Сonfirm deletion?'
                             onConfirm={() => this.handleDeleteQuote(record.key)}
                         >
                             <a href={text}>Delete</a>
                         </Popconfirm>
+                        : null
                 }
                 
             ],
@@ -57,52 +58,26 @@ class Quotes extends React.Component {
     }
 
     handleDeleteQuote = (key) => {
-        const quotes = [...this.state.data];
-       
-        deleteQuote(key, 'https://redevcrm.herokuapp.com/quotes')
-            .then(res => console.log(res))
-            .then(() => this.setState({
-                data: quotes.filter(item => item.key !== key)
-            }))
+        deleteQuote(key)
+            .then(() => getQuotes().then(quotes => this.setState({data: quotes})))         
     }
 
     onFinish = (value) => {
-        postQuote('https://redevcrm.herokuapp.com/quotes', value)
-            .then(res => {
-                const {_id, author, text} = res;
-                return {
-                    key: _id,
-                    author,
-                    quote: text,
-                    actions: 'Delete'
-                }
-            })
+        postQuote(value)
             .then(quote => 
                 this.setState({
                 data: [...this.state.data, {...quote}],
                 errorMessage: '',
                 visible: false
             }))
-            .catch(error => {
-                console.log(error);
-                return error ? this.setState({
+            .catch(error => error ? this.setState({
                     errorMessage: 'Something went wrong, check the entered data'
                 }) : null
-            });
+            );
     }
 
     componentDidMount() {
-        getQuotes('https://redevcrm.herokuapp.com/quotes')
-            .then(res => res.map(item => {
-                const {_id, author, text} = item;
-                return {
-                    key: _id,
-                    author,
-                    quote: text,
-                    actions: 'Delete'
-                }
-            }))
-            .then(quotes => this.setState({data: quotes}))
+        getQuotes().then(quotes => this.setState({data: quotes}))
     }
 
     render() {

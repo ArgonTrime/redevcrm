@@ -13,13 +13,10 @@ class Users extends React.Component {
         }
     }
     componentDidMount() {
-        getUsers('https://redevcrm.herokuapp.com/users')
-        .then(users => {
-            this.setState({
-                users,
-                isLoaded: true
-            })
-        })
+        getUsers().then(users => this.setState({
+            users,
+            isLoaded: true
+        }))
     }
 
     render() {

@@ -13,7 +13,7 @@ class Leeds extends React.Component {
         }
     }
     componentDidMount() {
-        getLeeds('https://redevcrm.herokuapp.com/leeds')
+        getLeeds()
         .then(leeds => {
             this.setState({
                 leeds,

@@ -18,7 +18,7 @@ class LayoutComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: false
+            isLoggedIn: localStorage.getItem('token') ? true : false
         };
         this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleLogoutClick = this.handleLogoutClick.bind(this);
@@ -36,8 +36,8 @@ class LayoutComponent extends React.Component {
     }
 
     render() {
-
-        const loginButtons = (this.state.isLoggedIn ? <Logout handleLogoutClick={this.handleLogoutClick}/> : <LoginForm handleLoginClick={this.handleLoginClick}/>);
+        const {isLoggedIn} = this.state;
+        const loginButtons = (isLoggedIn ? <Logout handleLogoutClick={this.handleLogoutClick}/> : <LoginForm handleLoginClick={this.handleLoginClick}/>);
 
         return (
             <Layout>
@@ -48,16 +48,21 @@ class LayoutComponent extends React.Component {
     
                 <Layout>
                     <Sider>
-                        <MenuItems isLoggedIn={this.state.isLoggedIn}/>
+                        <MenuItems isLoggedIn={isLoggedIn}/>
                     </Sider>
     
                     <Content>
-                            <Route path="/" render={() => <div></div>}/>
-                            <Route path='/users' component={Users}/>
-                            <Route path='/Leeds' component={Leeds}/>
-                            <Route path='/Quotes' component={Quotes}/>
-                            <Route path='/Tasks' component={Tasks}/>
-                            <Route path='/Activity' component={Activity}/>
+                        {isLoggedIn 
+                            ? <>
+                                <Route path="/" render={() => <div></div>}/>
+                                <Route path='/users' component={Users}/>
+                                <Route path='/Leeds' component={Leeds}/>
+                                <Route path='/Quotes' component={Quotes}/>
+                                <Route path='/Tasks' component={Tasks}/>
+                                <Route path='/Activity' component={Activity}/>
+                            </>
+                            : null
+                        }      
                     </Content>
                 </Layout>
             </Layout>

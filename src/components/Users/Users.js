@@ -13,13 +13,10 @@ class Users extends React.Component {
         }
     }
     componentDidMount() {
-        getUsers('https://redevcrm.herokuapp.com/users')
-        .then(users => {
-            this.setState({
-                users,
-                isLoaded: true
-            })
-        })
+        getUsers().then(users => this.setState({
+            users,
+            isLoaded: true
+        }))
     }
 
     render() {
@@ -27,10 +24,15 @@ class Users extends React.Component {
 
         if(isLoaded) {
             return (
-                <Table dataSource={users.map(user => ({
-                    ...user,
-                    key: user._id
-                }))}>
+                <Table 
+                    dataSource={users.map(user => ({
+                        ...user,
+                        key: user._id
+                    }))}
+                    style={{
+                        margin: '16px'
+                    }}
+                >
                     <Column title='First Name' dataIndex='firstName' key='firstName'/>
                     <Column title='Email' dataIndex='email' key='email'/>
                     <Column title='Birthday' dataIndex='birthday' key='birthday'/>

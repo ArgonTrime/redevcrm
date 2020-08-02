@@ -13,7 +13,7 @@ class Leeds extends React.Component {
         }
     }
     componentDidMount() {
-        getLeeds('https://redevcrm.herokuapp.com/leeds')
+        getLeeds()
         .then(leeds => {
             this.setState({
                 leeds,
@@ -27,10 +27,15 @@ class Leeds extends React.Component {
         
         if(isLoaded) {
             return (
-                <Table dataSource={leeds.map(leed => ({
-                    ...leed,
-                    key: leed._id
-                }))}>
+                <Table 
+                    dataSource={leeds.map(leed => ({
+                        ...leed,
+                        key: leed._id
+                    }))}
+                    style={{
+                        margin: '16px'
+                    }}
+                >
                     <Column title='ID' dataIndex='_id' key='_id'/>
                     <Column title='Communication method' dataIndex='type' key='_id'/>
                     <Column title='Address' dataIndex='target' key='_id'/>

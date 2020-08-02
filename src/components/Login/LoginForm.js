@@ -33,7 +33,7 @@ class LoginForm extends React.Component {
     };
 
     onFinish = (values) => {
-        loginUser('https://redevcrm.herokuapp.com/users/login', values)
+        loginUser(values)
         .then(res => {
             localStorage.setItem('token', res)
             this.setState({

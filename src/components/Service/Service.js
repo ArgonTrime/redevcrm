@@ -62,6 +62,19 @@ const postTask = async (value) => {
     });
 }
 
+//CheatSheetSections
+const getCheatSheetSections = async () => {
+    return await axios.get('https://redevcrm.herokuapp.com/CheatSheetSections').then(res => res.data.map(sections => {
+        const {_id, title, logo, image} = sections;
+        return {
+            key: _id,
+            title,
+            logo,
+            image
+        }
+    }));    
+}
+
 export {
     getUsers, 
     getLeeds, 
@@ -70,5 +83,6 @@ export {
     postQuote,
     deleteQuote,
     getTasks,
-    postTask
+    postTask,
+    getCheatSheetSections
 };

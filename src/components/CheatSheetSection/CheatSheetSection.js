@@ -14,7 +14,13 @@ class CheatSheetSection extends React.Component {
                     dataIndex: 'title',
                     key: 'title',
                     sorter: (a, b) => b.title.toLowerCase().charCodeAt(0) - a.title.toLowerCase().charCodeAt(0),
-                    sortDirections: ['descend']
+                    sortDirections: ['descend'],
+                    filters: [
+                        { text: 'JavaScript', value: 'javascript' },
+                        { text: 'React', value: 'react' },
+                        { text: 'Redux', value: 'redux' }
+                    ],
+                    onFilter: (value, record) => record.title.indexOf(value.toLowerCase()) === 0
                 },
                 {
                     title: 'Logo',

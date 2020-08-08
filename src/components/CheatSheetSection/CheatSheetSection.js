@@ -1,7 +1,7 @@
 import React from 'react';
-import {getCheatSheetSections} from '../Service/Service';
-import {Table, Button, Modal, Form, Input} from 'antd';
-import {FileExcelOutlined} from '@ant-design/icons';
+import {getCheatSheetSections, postCheatSheetSections} from '../Service/Service';
+import {Table, Button, Modal, Form, Input, Upload} from 'antd';
+import {UploadOutlined} from '@ant-design/icons'; 
 
 class CheatSheetSection extends React.Component {
     constructor(props) {
@@ -22,9 +22,7 @@ class CheatSheetSection extends React.Component {
                     key: 'logo',
                     render: (dataIndex) => (
                         dataIndex === '' || dataIndex === null ?
-                        <FileExcelOutlined style={{
-                            fontSize: '20px'
-                        }}/> :
+                        null :
                         <img src={dataIndex} alt='' style={{
                             height: '80px',
                             width: '120px'
@@ -37,9 +35,7 @@ class CheatSheetSection extends React.Component {
                     key: 'image',
                     render: (dataIndex) => (
                         dataIndex === '' || dataIndex === null ?
-                        <FileExcelOutlined style={{
-                            fontSize: '20px'
-                        }}/> :
+                        null :
                         <img src={dataIndex} alt='' style={{
                             height: '80px',
                             width: '120px'
@@ -53,7 +49,6 @@ class CheatSheetSection extends React.Component {
     }
 
     componentDidMount() {
-        getCheatSheetSections().then(res => console.log(res));
         getCheatSheetSections()
             .then(sections => this.setState({data: sections}));
     }
@@ -77,7 +72,27 @@ class CheatSheetSection extends React.Component {
     }
 
     onFinish = (value) => {
-        console.log(value);
+        const {title, logo:[{response:{imageUrl:urlLogo}}], image:[{response:{imageUrl:urlImage}}]} = value;
+        const newValue = {title, logo: urlLogo, image: urlImage};
+
+        postCheatSheetSections(newValue)
+            .then(section => this.setState({
+                data: [...this.state.data, {...section}],
+                errorMessage: '',
+                visible: false
+            }))
+            .catch(error => error ? this.setState({
+                    errorMessage: 'Something went wrong, check the entered data'
+                }) : null
+            );
+    }
+
+    normFile = (e) => {
+        if(Array.isArray(e)) {
+            return e;
+        }
+
+        return e && e.fileList;
     }
 
     render() {
@@ -98,6 +113,9 @@ class CheatSheetSection extends React.Component {
                 <Button 
                     type="primary"
                     onClick={this.showForm}
+                    style={{
+                        marginBottom: '16px'
+                    }}
                 >
                     Create cheat sheet
                 </Button>
@@ -111,6 +129,7 @@ class CheatSheetSection extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
+                    title='Cheat sheet'
                 >
 
                     <Form
@@ -118,19 +137,39 @@ class CheatSheetSection extends React.Component {
                         onFinish={this.onFinish}
                     >
                         <Form.Item 
-                            label='Author'
-                            name='author'
-                            rules={[{ required: true, message: 'Please input author! '}]}
+                            label='Title'
+                            name='title'
+                            rules={[{ required: true, message: 'Please input title! '}]}
                         >
                             <Input/>
                         </Form.Item>
 
                         <Form.Item
-                            label='Quote'
-                            name='text'
-                            rules={[{ required: true, message: 'Please input your quote! '}]}
+                            name='logo'
+                            label='Logo'
+                            valuePropName='fileList'
+                            getValueFromEvent={this.normFile}
+                            extra='PNG'
                         >
-                            <Input/>
+                            <Upload name='image' action='https://redevcrm.herokuapp.com/upload' listType='picture'>
+                                <Button>
+                                    <UploadOutlined /> Upload photo
+                                </Button>
+                            </Upload>
+                        </Form.Item>
+
+                        <Form.Item
+                            name='image'
+                            label='Image'
+                            valuePropName='fileList'
+                            getValueFromEvent={this.normFile}
+                            extra='PNG'
+                        >
+                            <Upload name='image' action='https://redevcrm.herokuapp.com/upload' listType='picture'>
+                                <Button>
+                                    <UploadOutlined /> Upload photo
+                                </Button>
+                            </Upload>
                         </Form.Item>
 
                         <Form.Item {...tailLayout}>
@@ -138,7 +177,7 @@ class CheatSheetSection extends React.Component {
                                 type='primary' 
                                 htmlType='submit'
                             >
-                                Add Quote
+                                Create cheat sheet
                             </Button>
                             
                         </Form.Item>

@@ -97,6 +97,7 @@ class Tasks extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
+                    title='Task'
                 >
 
                     <Form

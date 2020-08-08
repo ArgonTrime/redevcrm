@@ -116,6 +116,7 @@ class Quotes extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
+                    title='Quote'
                 >
 
                     <Form

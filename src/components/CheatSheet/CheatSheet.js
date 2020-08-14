@@ -1,6 +1,7 @@
 import React from 'react';
 import {Tabs} from 'antd';
 import CheatSheetSection from '../CheatSheetSection/CheatSheetSection';
+import CheatSheetThemes from '../CheatSheetThemes/CheatSheetThemes';
 
 const {TabPane} = Tabs;
 
@@ -31,7 +32,7 @@ class CheatSheet extends React.Component {
           </TabPane>
 
           <TabPane tab='Themes of cheat sheet' key='2'>
-            Content of card tab 2
+            <CheatSheetThemes/>
           </TabPane>
         </Tabs>
 

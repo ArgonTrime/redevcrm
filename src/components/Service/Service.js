@@ -87,6 +87,42 @@ const postCheatSheetSections = async (value) => {
     })
 }
 
+const getCheatSheetThemes = async () => {
+    return await axios.get('https://redevcrm.herokuapp.com/CheatSheetThemes').then(res => res.data.map(theme => {
+        const {_id, title, keyword, image, cheatSheetSectionId} = theme;
+        return {
+            key: _id,
+            title,
+            keyword,
+            image,
+            cheatSheetSectionId
+        }
+    }))
+}
+
+const getCheatSheetThemesSection = async () => {
+    return await axios.get('https://redevcrm.herokuapp.com/CheatSheetSections').then(res => res.data.map(sections => {
+        const {_id, title} = sections;
+        return {
+            key: _id,
+            title
+        }
+    }));
+}
+
+const postCheatSheetThemes = async (value) => {
+    return await axios.post('https://redevcrm.herokuapp.com/CheatSheetThemes', value).then(res => {
+        const {_id, title, keyword, image, cheatSheetSectionId} = res.data;
+        return {
+            key: _id,
+            title,
+            keyword,
+            image,
+            cheatSheetSectionId
+        }
+    })
+}
+
 export {
     getUsers, 
     getLeeds, 
@@ -97,5 +133,8 @@ export {
     getTasks,
     postTask,
     getCheatSheetSections,
-    postCheatSheetSections
+    postCheatSheetSections,
+    getCheatSheetThemes,
+    getCheatSheetThemesSection,
+    postCheatSheetThemes
 };

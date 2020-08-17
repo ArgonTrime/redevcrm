@@ -26,9 +26,6 @@ const MenuItems = ({isLoggedIn}) => {
                 <Menu.Item key="5">
                     <Link to='/CheatSheet'>Cheat sheet</Link>
                 </Menu.Item>
-                <Menu.Item key="6">
-                    <Link to='/Activity'>Activity</Link>
-                </Menu.Item>
             </Menu>
             : <Menu 
                 theme="dark" 

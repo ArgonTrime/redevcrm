@@ -6,7 +6,6 @@ import Users from '../Users/Users';
 import Leeds from '../Leeds/Leeds';
 import Quotes from '../Quotes/Quotes';
 import Tasks from '../Tasks/Tasks';
-import Activity from '../Activity/Activity';
 import LoginForm from '../Login/LoginForm';
 import Logout from '../Logout/Logout';
 import MenuItems from '../MenuItems/MenuItems';
@@ -61,7 +60,6 @@ class LayoutComponent extends React.Component {
                                 <Route path='/Quotes' component={Quotes}/>
                                 <Route path='/Tasks' component={Tasks}/>
                                 <Route path='/CheatSheet' component={CheatSheet}/>
-                                <Route path='/Activity' component={Activity}/>
                             </>
                             : null
                         }      

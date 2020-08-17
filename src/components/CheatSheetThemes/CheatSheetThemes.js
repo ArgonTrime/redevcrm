@@ -15,7 +15,12 @@ class CheatSheetThemes extends React.Component {
                 {
                     title: 'Title',
                     dataIndex: 'title',
-                    key: 'title'
+                    key: 'title',
+                    sorter: (a, b) => b.title.toLowerCase().charCodeAt(0) - a.title.toLowerCase().charCodeAt(0),
+                    sortDirections: ['descend'],
+                    filter: this.state.section.map(section => {
+                        return {text: section.title, value: section.key}
+                    })
                 },
                 {
                     title: 'Keyword',

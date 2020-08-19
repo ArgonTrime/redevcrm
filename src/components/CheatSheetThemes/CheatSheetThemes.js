@@ -11,45 +11,16 @@ class CheatSheetThemes extends React.Component {
         this.state = {
             data: [],
             section: [],
-            columns: [
-                {
-                    title: 'Title',
-                    dataIndex: 'title',
-                    key: 'title',
-                    sorter: (a, b) => b.title.toLowerCase().charCodeAt(0) - a.title.toLowerCase().charCodeAt(0),
-                    sortDirections: ['descend'],
-                    filter: this.state.section.map(section => {
-                        return {text: section.title, value: section.key}
-                    })
-                },
-                {
-                    title: 'Keyword',
-                    dataIndex: 'keyword',
-                    key: 'keyword'
-                },
-                {
-                    title: 'Image',
-                    dataIndex: 'image',
-                    key: 'image',
-                    render: (dataIndex) => (
-                        dataIndex === '' || dataIndex === null ?
-                        null :
-                        <img src={dataIndex} alt='' style={{
-                            height: '80px',
-                            width: '120px'
-                        }}/>
-                    )
-                } 
-            ],
             visible: false,
             errorMessage: ''
         }
     }
 
     componentDidMount() {
-        getCheatSheetThemes().then(res => this.setState({
-            data: res
-        }));
+        getCheatSheetThemes()
+            .then(res => this.setState({
+                data: res
+            }));
         getCheatSheetThemesSection()
             .then(section => this.setState({
                 section
@@ -75,8 +46,8 @@ class CheatSheetThemes extends React.Component {
     }
 
     onFinish = (value) => {
-        const {title, keyword, cheatSheetSectionId, image:[{response:{imageUrl:urlImage}}]} = value;
-        const newValue = {title, cheatSheetSectionId, image: urlImage, keyword};
+        const {title, keyword, сheatSheetSectionId, image:[{response:{imageUrl:urlImage}}]} = value;
+        const newValue = {title, сheatSheetSectionId, image: urlImage, keyword};
 
         postCheatSheetThemes(newValue)
             .then(themes => this.setState({
@@ -96,7 +67,40 @@ class CheatSheetThemes extends React.Component {
 
     render() {
 
-        const {data, columns, section} = this.state;
+        const {data, section} = this.state;
+        const filter = section.map(section => {
+            return {text: section.title, value: section.key}
+        });
+
+        const columns = [
+            {
+                title: 'Title',
+                dataIndex: 'title',
+                key: 'title',
+                sorter: (a, b) => b.title.toLowerCase().charCodeAt(0) - a.title.toLowerCase().charCodeAt(0),
+                sortDirections: ['descend'],
+                filters: filter,
+                onFilter: (value, record) => value === record.сheatSheetSectionId
+            },
+            {
+                title: 'Keyword',
+                dataIndex: 'keyword',
+                key: 'keyword'
+            },
+            {
+                title: 'Image',
+                dataIndex: 'image',
+                key: 'image',
+                render: (dataIndex) => (
+                    dataIndex === '' || dataIndex === null ?
+                    null :
+                    <img src={dataIndex} alt='' style={{
+                        height: '80px',
+                        width: '120px'
+                    }}/>
+                )
+            } 
+        ];
 
         const layout = {
             labelCol: {span: 8},
@@ -152,7 +156,7 @@ class CheatSheetThemes extends React.Component {
                         </Form.Item>
 
                         <Form.Item
-                            name='cheatSheetSectionId'
+                            name='сheatSheetSectionId'
                             label='Section'
                             rules={[
                                 {
@@ -162,12 +166,8 @@ class CheatSheetThemes extends React.Component {
                         >
                             <Select
                                 placeholder='Plese chose a section'
-                                // onChange={onGenderChange}
                                 allowClear
                             >
-                                {/* <Option value="male">male</Option>
-                                <Option value="female">female</Option>
-                                <Option value="other">other</Option> */}
                                 {section.map(section => {
                                     return <Option key={section.key} value={section.key}>{section.title}</Option>
                                 })}

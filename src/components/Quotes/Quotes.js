@@ -18,6 +18,7 @@ class Quotes extends React.Component {
                     title: 'Quote',
                     dataIndex: 'quote',
                     key: 'quote',
+                    editable: true
                 },
                 {
                     title: 'Action',

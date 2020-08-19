@@ -89,13 +89,13 @@ const postCheatSheetSections = async (value) => {
 
 const getCheatSheetThemes = async () => {
     return await axios.get('https://redevcrm.herokuapp.com/CheatSheetThemes').then(res => res.data.map(theme => {
-        const {_id, title, keyword, image, cheatSheetSectionId} = theme;
+        const {_id, title, keyword, image, сheatSheetSectionId} = theme;
         return {
             key: _id,
             title,
             keyword,
             image,
-            cheatSheetSectionId
+            сheatSheetSectionId
         }
     }))
 }

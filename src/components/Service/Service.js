@@ -39,6 +39,9 @@ const postQuote = async (value) => {
 const deleteQuote = async (item) => {
     return axios.delete('https://redevcrm.herokuapp.com/quotes/' + item).then(res => res.data);
 }
+const postEditingQuotes = async (quoteId, quoteText) => {
+    return await axios.patch(`https://redevcrm.herokuapp.com/quotes/${quoteId}`, quoteText).then(res => console.log(res.data));
+}
 
 //tasks
 const getTasks = async () => {
@@ -130,6 +133,7 @@ export {
     getQuotes, 
     postQuote,
     deleteQuote,
+    postEditingQuotes,
     getTasks,
     postTask,
     getCheatSheetSections,

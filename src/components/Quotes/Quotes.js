@@ -1,6 +1,9 @@
 import React from 'react';
 import {Table, Button, Modal, Form, Input, Popconfirm} from 'antd';
-import {getQuotes, postQuote, deleteQuote} from '../Service/Service';
+import {getQuotes, postQuote, deleteQuote, postEditingQuotes} from '../Service/Service';
+import EditableRow from './components/EditableRow';
+import EditableCell from './components/EditableCell';
+import './Quotes.css';
 
 class Quotes extends React.Component {
 
@@ -31,8 +34,7 @@ class Quotes extends React.Component {
                             <a href={text}>Delete</a>
                         </Popconfirm>
                         : null
-                }
-                
+                }              
             ],
             visible: false,
             errorMessage: ''
@@ -77,12 +79,46 @@ class Quotes extends React.Component {
             );
     }
 
+    handleSave = row => {
+        const newData = [...this.state.data];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...row });
+        console.log(newData, row);
+        postEditingQuotes(row.key, {text: row.quote})
+            .then(() => this.setState({
+                data: newData
+            }));
+    };
+
     componentDidMount() {
         getQuotes().then(quotes => this.setState({data: quotes}))
     }
 
     render() {
-        const {data, columns} = this.state;
+        const {data} = this.state;
+        const components = {
+            body: {
+                row: EditableRow,
+                cell: EditableCell
+            }
+        }
+        const columns = this.state.columns.map(col => {
+            if (!col.editable) {
+                return col;
+            }
+        
+            return {
+                ...col,
+                onCell: record => ({
+                    record,
+                    editable: col.editable,
+                    dataIndex: col.dataIndex,
+                    title: col.title,
+                    handleSave: this.handleSave,
+                }),
+            };
+        })
 
         const layout = {
             labelCol: {span: 8},
@@ -110,6 +146,9 @@ class Quotes extends React.Component {
                     style={{
                         margin: '0 16px'
                     }}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    components={components}
                 />
 
                 <Modal 
@@ -147,7 +186,6 @@ class Quotes extends React.Component {
                             >
                                 Add Quote
                             </Button>
-                            
                         </Form.Item>
                     </Form>
                     <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>

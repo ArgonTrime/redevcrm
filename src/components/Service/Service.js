@@ -39,6 +39,9 @@ const postQuote = async (value) => {
 const deleteQuote = async (item) => {
     return axios.delete('https://redevcrm.herokuapp.com/quotes/' + item).then(res => res.data);
 }
+const postEditingQuotes = async (quoteId, quoteText) => {
+    return await axios.patch(`https://redevcrm.herokuapp.com/quotes/${quoteId}`, quoteText).then(res => console.log(res.data));
+}
 
 //tasks
 const getTasks = async () => {
@@ -89,13 +92,13 @@ const postCheatSheetSections = async (value) => {
 
 const getCheatSheetThemes = async () => {
     return await axios.get('https://redevcrm.herokuapp.com/CheatSheetThemes').then(res => res.data.map(theme => {
-        const {_id, title, keyword, image, cheatSheetSectionId} = theme;
+        const {_id, title, keyword, image, сheatSheetSectionId} = theme;
         return {
             key: _id,
             title,
             keyword,
             image,
-            cheatSheetSectionId
+            сheatSheetSectionId
         }
     }))
 }
@@ -130,6 +133,7 @@ export {
     getQuotes, 
     postQuote,
     deleteQuote,
+    postEditingQuotes,
     getTasks,
     postTask,
     getCheatSheetSections,

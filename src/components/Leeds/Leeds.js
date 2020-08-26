@@ -2,54 +2,50 @@ import React from 'react';
 import { getLeeds } from '../Service/Service';
 import { Table } from 'antd';
 
-const {Column} = Table;
-
 class Leeds extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            leeds: [],
-            isLoaded: false
-        }
+    
+    state = {
+        leeds: []
     }
+
     componentDidMount() {
         getLeeds()
-        .then(leeds => {
-            this.setState({
-                leeds,
-                isLoaded: true
-            })
-        })
+            .then(leeds => this.setState({
+                leeds
+            }))
     }
 
     render() {
-        const {isLoaded, leeds} = this.state;
-        
-        if(isLoaded) {
-            return (
-                <Table 
-                    dataSource={leeds.map(leed => ({
-                        ...leed,
-                        key: leed._id
-                    }))}
-                    style={{
-                        margin: '16px'
-                    }}
-                >
-                    <Column title='ID' dataIndex='_id' key='_id'/>
-                    <Column title='Communication method' dataIndex='type' key='_id'/>
-                    <Column title='Address' dataIndex='target' key='_id'/>
-                </Table>
-            )
-        }
-        
+        const {leeds} = this.state;
+
+        const columns = [
+            {
+                title: 'ID',
+                dataIndex: 'key',
+                key: 'key'
+            },
+            {
+                title: 'Communication method',
+                dataIndex: 'type',
+                key: 'type'
+            },
+            {
+                title: 'Address',
+                dataIndex: 'target',
+                key: 'target'
+            }
+        ]
+
         return (
-            <div>
-                <span>Loading...</span>
-            </div>
+            <Table
+                dataSource={leeds}
+                columns={columns}
+                style={{
+                    margin: '16px'
+                }}
+            />
         )
     }
-    
 }
 
 export default Leeds;

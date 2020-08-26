@@ -1,28 +1,14 @@
 import React from 'react';
-import {getTasks, postTask} from '../Service/Service';
-import {Table, Button, Modal, Form, Input} from 'antd';
+import { getTasks, postTask } from '../Service/Service';
+import { Table } from 'antd';
+import TaskForm from './components/TaskForm';
 
 class Tasks extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            columns: [
-                {
-                    title: 'Theme',
-                    dataIndex: 'theme',
-                    key: 'theme',
-                },
-                {
-                    title: 'Text',
-                    dataIndex: 'text',
-                    key: 'text',
-                }
-            ],
-            visible: false,
-            errorMessage: ''
-        }
+    state = {
+        data: [],
+        visible: false,
+        errorMessage: ''
     }
 
     showForm = () => {
@@ -62,28 +48,31 @@ class Tasks extends React.Component {
 
     render() {
 
-        const {data, columns} = this.state;
+        const {data, visible, errorMessage} = this.state;
 
-        const layout = {
-            labelCol: {span: 8},
-            wrapperCol: {span: 12}
-        }
-
-        const tailLayout = {
-            wrapperCol: { offset: 0, span: 4 },
-        }
+        const columns = [
+            {
+                title: 'Theme',
+                dataIndex: 'theme',
+                key: 'theme',
+            },
+            {
+                title: 'Text',
+                dataIndex: 'text',
+                key: 'text',
+            }
+        ];
 
         return (
-            <div>
-                <Button 
-                    type="primary"
-                    onClick={this.showForm}
-                    style={{
-                        margin: '16px'
-                    }}
-                >
-                    Create task
-                </Button>
+            <>
+                <TaskForm
+                    showForm={this.showForm}
+                    visible={visible}
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+                    onFinish={this.onFinish}
+                    errorMessage={errorMessage}
+                />
                 <Table 
                     dataSource={data} 
                     columns={columns}
@@ -91,48 +80,7 @@ class Tasks extends React.Component {
                         margin: '0 16px'
                     }}
                 />
-
-                <Modal 
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    title='Task'
-                >
-
-                    <Form
-                        {...layout}
-                        onFinish={this.onFinish}
-                    >
-                        <Form.Item 
-                            label='Theme'
-                            name='theme'
-                            rules={[{ required: true, message: 'Please input theme! '}]}
-                        >
-                            <Input/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label='Text'
-                            name='text'
-                            rules={[{ required: true, message: 'Please input your text! '}]}
-                        >
-                            <Input/>
-                        </Form.Item>
-
-                        <Form.Item {...tailLayout}>
-                            <Button  
-                                type='primary' 
-                                htmlType='submit'
-                            >
-                                Add task
-                            </Button>
-                            
-                        </Form.Item>
-                    </Form>
-                    <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
-                </Modal>
-            </div>
+            </>
         )
     }
 }

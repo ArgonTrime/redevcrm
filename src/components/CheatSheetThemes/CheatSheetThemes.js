@@ -1,19 +1,15 @@
 import React from 'react';
-import {getCheatSheetThemes, getCheatSheetThemesSection, postCheatSheetThemes} from '../Service/Service';
-import {Button, Table, Modal, Form, Input, Upload, Select} from 'antd';
-import {UploadOutlined} from '@ant-design/icons'; 
-
-const {Option} = Select;
+import { getCheatSheetThemes, getCheatSheetThemesSection, postCheatSheetThemes } from '../Service/Service';
+import { Table } from 'antd';
+import ThemeForm from './componenst/ThemeForm';
 
 class CheatSheetThemes extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            section: [],
-            visible: false,
-            errorMessage: ''
-        }
+    
+    state = {
+        data: [],
+        section: [],
+        visible: false,
+        errorMessage: ''
     }
 
     componentDidMount() {
@@ -67,7 +63,7 @@ class CheatSheetThemes extends React.Component {
 
     render() {
 
-        const {data, section} = this.state;
+        const {data, section, visible, errorMessage} = this.state;
         const filter = section.map(section => {
             return {text: section.title, value: section.key}
         });
@@ -102,105 +98,23 @@ class CheatSheetThemes extends React.Component {
             } 
         ];
 
-        const layout = {
-            labelCol: {span: 8},
-            wrapperCol: {span: 12}
-        }
-
-        const tailLayout = {
-            wrapperCol: { offset: 0, span: 4 },
-        }
-
         return (
-            <div>
-                <Button 
-                    type="primary"
-                    onClick={this.showForm}
-                    style={{
-                        marginBottom: '16px'
-                    }}
-                >
-                    Create a cheat sheet theme
-                </Button>
+            <>
+                <ThemeForm
+                    showForm={this.showForm}
+                    visible={visible}
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+                    onFinish={this.onFinish}
+                    normFile={this.normFile}
+                    errorMessage={errorMessage}
+                    section={section}
+                />
                 <Table 
                     dataSource={data} 
                     columns={columns}
                 />
-
-                <Modal 
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    title='Cheat sheet'
-                >
-
-                    <Form
-                        {...layout}
-                        onFinish={this.onFinish}
-                    >
-                        <Form.Item 
-                            label='Title'
-                            name='title'
-                            rules={[{ required: true, message: 'Please input title! '}]}
-                        >
-                            <Input placeholder='Theme of cheat sheet'/>
-                        </Form.Item>
-
-                        <Form.Item 
-                            label='Keyword'
-                            name='keyword'
-                            rules={[{ required: true, message: 'Please input title! '}]}
-                        >
-                            <Input placeholder='Keyword'/>
-                        </Form.Item>
-
-                        <Form.Item
-                            name='сheatSheetSectionId'
-                            label='Section'
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            <Select
-                                placeholder='Plese chose a section'
-                                allowClear
-                            >
-                                {section.map(section => {
-                                    return <Option key={section.key} value={section.key}>{section.title}</Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name='image'
-                            label='Upload'
-                            valuePropName='fileList'
-                            getValueFromEvent={this.normFile}
-                            extra='PNG'
-                        >
-                            <Upload name='image' action='https://redevcrm.herokuapp.com/upload' listType='picture'>
-                                <Button>
-                                    <UploadOutlined /> Upload photo
-                                </Button>
-                            </Upload>
-                        </Form.Item>
-
-                        <Form.Item {...tailLayout}>
-                            <Button  
-                                type='primary' 
-                                htmlType='submit'
-                            >
-                                Create cheat sheet
-                            </Button>
-                            
-                        </Form.Item>
-                    </Form>
-                    <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
-                </Modal>
-            </div>
+            </>
         )
     }
 }

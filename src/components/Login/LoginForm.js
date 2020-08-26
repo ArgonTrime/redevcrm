@@ -115,8 +115,7 @@ class LoginForm extends React.Component {
                     </Form>
                     <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
                 </Modal>
-            </>
-            
+            </>           
         )
     }
 }

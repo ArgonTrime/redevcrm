@@ -2,12 +2,28 @@ import axios from 'axios';
 
 //users
 const getUsers = async () => {
-    return await axios.get('https://redevcrm.herokuapp.com/users').then(res => res.data);
+    return await axios.get('https://redevcrm.herokuapp.com/users').then(res => res.data.map(user => {
+        const {_id, birthday, email, firstName, lastName} = user;
+        return {
+            key: _id,
+            birthday,
+            email,
+            firstName,
+            lastName
+        }
+    }));
 }
 
 //leeds
 const getLeeds = async () => {
-    return await axios.get('https://redevcrm.herokuapp.com/leeds').then(res => res.data);
+    return await axios.get('https://redevcrm.herokuapp.com/leeds').then(res => res.data.map(leeds => {
+        const {_id, type, target} = leeds;
+        return {
+            key: _id,
+            type,
+            target
+        }
+    }));
 }
 
 //login

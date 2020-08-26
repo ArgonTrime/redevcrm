@@ -1,45 +1,42 @@
 import React from 'react';
-import {Table, Button, Modal, Form, Input, Popconfirm} from 'antd';
+import {Table, Popconfirm} from 'antd';
 import {getQuotes, postQuote, deleteQuote, postEditingQuotes} from '../Service/Service';
 import EditableRow from './components/EditableRow';
 import EditableCell from './components/EditableCell';
 import './Quotes.css';
+import QuotesForm from './components/QuotesForm';
 
 class Quotes extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            columns: [
-                {
-                    title: 'Author',
-                    dataIndex: 'author',
-                    key: 'author',
-                },
-                {
-                    title: 'Quote',
-                    dataIndex: 'quote',
-                    key: 'quote',
-                    editable: true
-                },
-                {
-                    title: 'Action',
-                    dataIndex: 'action',
-                    render: (text, record) => this.state.data ?
-                        <Popconfirm 
-                            title='Сonfirm deletion?'
-                            onConfirm={() => this.handleDeleteQuote(record.key)}
-                        >
-                            <a href={text}>Delete</a>
-                        </Popconfirm>
-                        : null
-                }              
-            ],
-            visible: false,
-            errorMessage: ''
-
-        }
+    state = {
+        data: [],
+        columns: [
+            {
+                title: 'Author',
+                dataIndex: 'author',
+                key: 'author',
+            },
+            {
+                title: 'Quote',
+                dataIndex: 'quote',
+                key: 'quote',
+                editable: true
+            },
+            {
+                title: 'Action',
+                dataIndex: 'action',
+                render: (text, record) => this.state.data ?
+                    <Popconfirm 
+                        title='Сonfirm deletion?'
+                        onConfirm={() => this.handleDeleteQuote(record.key)}
+                    >
+                        <a href={text}>Delete</a>
+                    </Popconfirm>
+                    : null
+            }              
+        ],
+        visible: false,
+        errorMessage: ''
     }
 
     showForm = () => {
@@ -83,8 +80,8 @@ class Quotes extends React.Component {
         const newData = [...this.state.data];
         const index = newData.findIndex(item => row.key === item.key);
         const item = newData[index];
+
         newData.splice(index, 1, { ...item, ...row });
-        console.log(newData, row);
         postEditingQuotes(row.key, {text: row.quote})
             .then(() => this.setState({
                 data: newData
@@ -96,7 +93,7 @@ class Quotes extends React.Component {
     }
 
     render() {
-        const {data} = this.state;
+        const {data, visible, errorMessage} = this.state;
         const components = {
             body: {
                 row: EditableRow,
@@ -118,28 +115,18 @@ class Quotes extends React.Component {
                     handleSave: this.handleSave,
                 }),
             };
-        })
-
-        const layout = {
-            labelCol: {span: 8},
-            wrapperCol: {span: 12}
-        }
-
-        const tailLayout = {
-            wrapperCol: { offset: 0, span: 4 },
-        }
+        });
 
         return (
-            <div>
-                <Button 
-                    type="primary"
-                    onClick={this.showForm}
-                    style={{
-                        margin: '16px'
-                    }}
-                >
-                    Create Quote
-                </Button>
+            <>
+                <QuotesForm
+                    showForm={this.showForm}
+                    visible={visible}
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+                    onFinish={this.onFinish}
+                    errorMessage={errorMessage}
+                />
                 <Table 
                     dataSource={data} 
                     columns={columns}
@@ -150,50 +137,9 @@ class Quotes extends React.Component {
                     bordered
                     components={components}
                 />
-
-                <Modal 
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    title='Quote'
-                >
-
-                    <Form
-                        {...layout}
-                        onFinish={this.onFinish}
-                    >
-                        <Form.Item 
-                            label='Author'
-                            name='author'
-                            rules={[{ required: true, message: 'Please input author! '}]}
-                        >
-                            <Input/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label='Quote'
-                            name='text'
-                            rules={[{ required: true, message: 'Please input your quote! '}]}
-                        >
-                            <Input/>
-                        </Form.Item>
-
-                        <Form.Item {...tailLayout}>
-                            <Button  
-                                type='primary' 
-                                htmlType='submit'
-                            >
-                                Add Quote
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                    <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
-                </Modal>
-            </div>
+            </>
         )
     }
-    
 }
 
 export default Quotes;

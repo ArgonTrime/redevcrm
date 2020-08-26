@@ -1,7 +1,7 @@
 import React from 'react';
-import { Layout} from 'antd';
+import { Layout } from 'antd';
 import './LayoutComponent.css';
-import {Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Users from '../Users/Users';
 import Leeds from '../Leeds/Leeds';
 import Quotes from '../Quotes/Quotes';
@@ -14,20 +14,15 @@ import CheatSheet from '../CheatSheet/CheatSheet';
 const { Header, Content, Sider } = Layout;
 
 class LayoutComponent extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoggedIn: localStorage.getItem('token') ? true : false
-        };
-        this.handleLoginClick = this.handleLoginClick.bind(this);
-        this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    state = {
+        isLoggedIn: localStorage.getItem('token') ? true : false
     }
-    handleLoginClick() {
+
+    handleLoginClick = () => {
         this.setState({isLoggedIn: true});
     }
     
-    handleLogoutClick() {
+    handleLogoutClick = () => {
         this.setState({isLoggedIn: false});
     }
 

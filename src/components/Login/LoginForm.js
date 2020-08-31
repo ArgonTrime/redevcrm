@@ -54,6 +54,8 @@ class LoginForm extends React.Component {
 
     render() {
 
+        const {errorMessage} = this.state;
+
         const layout = {
             labelCol: {span: 8},
             wrapperCol: {span: 12}
@@ -113,7 +115,7 @@ class LoginForm extends React.Component {
                             
                         </Form.Item>
                     </Form>
-                    <span>{this.state.errorMessage ? this.state.errorMessage : null}</span>
+                    <span>{errorMessage && errorMessage}</span>
                 </Modal>
             </>           
         )

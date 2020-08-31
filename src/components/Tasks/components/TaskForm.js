@@ -61,7 +61,7 @@ const TaskForm = ({showForm, visible, handleOk, handleCancel, onFinish, errorMes
                         
                     </Form.Item>
                 </Form>
-                <span>{errorMessage ? errorMessage : null}</span>
+                <span>{errorMessage && errorMessage}</span>
             </Modal>
         </>
     )

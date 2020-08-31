@@ -59,7 +59,7 @@ const QuotesForm = ({showForm, visible, handleOk, handleCancel, onFinish, errorM
                         </Button>
                     </Form.Item>
                 </Form>
-                <span>{errorMessage ? errorMessage : null}</span>
+                <span>{errorMessage && errorMessage}</span>
             </Modal>
         </>
     )

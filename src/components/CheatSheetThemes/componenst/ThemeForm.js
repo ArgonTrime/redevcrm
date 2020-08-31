@@ -97,7 +97,7 @@ const ThemeForm = ({showForm, visible, handleOk, handleCancel, onFinish, normFil
                         
                     </Form.Item>
                 </Form>
-                <span>{errorMessage ? errorMessage : null}</span>
+                <span>{errorMessage && errorMessage}</span>
             </Modal>
         </>
     )

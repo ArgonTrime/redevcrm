@@ -15,7 +15,7 @@ const { Header, Content, Sider } = Layout;
 
 class LayoutComponent extends React.Component {
     state = {
-        isLoggedIn: localStorage.getItem('token') ? true : false
+        isLoggedIn: false
     }
 
     handleLoginClick = () => {
@@ -26,8 +26,13 @@ class LayoutComponent extends React.Component {
         this.setState({isLoggedIn: false});
     }
 
-    conponentDidMount() {
-        localStorage.getItem('token') ? this.handleLoginClick() : this.handleLogoutClick();
+    token = localStorage.getItem('token');
+
+    loginDefinition = (token = false) => token && this.setState({ isLoggedIn: true });
+    
+    componentDidMount() {
+        this.loginDefinition(this.token);
+        this.token ? this.handleLoginClick() : this.handleLogoutClick();
     }
 
     render() {
@@ -47,16 +52,14 @@ class LayoutComponent extends React.Component {
                     </Sider>
     
                     <Content>
-                        {isLoggedIn 
-                            ? <>
-                                <Route path="/" render={() => <div></div>}/>
-                                <Route path='/users' component={Users}/>
-                                <Route path='/Leeds' component={Leeds}/>
-                                <Route path='/Quotes' component={Quotes}/>
-                                <Route path='/Tasks' component={Tasks}/>
-                                <Route path='/CheatSheet' component={CheatSheet}/>
-                            </>
-                            : null
+                        {isLoggedIn &&  <>
+                                            <Route path="/" render={() => <div></div>}/>
+                                            <Route path='/users' component={Users}/>
+                                            <Route path='/Leeds' component={Leeds}/>
+                                            <Route path='/Quotes' component={Quotes}/>
+                                            <Route path='/Tasks' component={Tasks}/>
+                                            <Route path='/CheatSheet' component={CheatSheet}/>
+                                        </>
                         }      
                     </Content>
                 </Layout>
